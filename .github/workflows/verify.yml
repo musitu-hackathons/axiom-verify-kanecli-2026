@@ -48,7 +48,7 @@ jobs:
           retention-days: 7
 
   kane_repaired:
-    if: (github.event_name == 'workflow_dispatch' && inputs.repair) || (github.event_name == 'push' && github.ref == 'refs/heads/agent-repair-kane-2026-11-20' && github.actor == 'evansmusitu' && github.event.head_commit.message == 'Agent repairs Kane-detected NPV bug and reruns verified browser')
+    if: github.event_name == 'workflow_dispatch' && inputs.repair
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
