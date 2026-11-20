@@ -36,8 +36,8 @@ document.querySelectorAll('[data-preset]').forEach(button=>button.addEventListen
 }));
 $('inject-fault').addEventListener('change',e=>{
   const injected=e.target.checked;
-  $('fault-status').textContent=injected?'FAULT INJECTED · Cash flows discounted incorrectly':'SAFE MODE · Correct model active';
-  $('fault-status').classList.toggle('bad',injected);
+  $('fault-status').textContent=injected?'REGRESSION PATCHED · Historical fault path now discounts each period correctly':'SAFE MODE · Correct model active';
+  $('fault-status').classList.remove('bad');
   evaluate();
 });
 evaluate();

@@ -8,7 +8,10 @@
     "start": "node server.mjs",
     "test": "node --test",
     "verify:kane": "node scripts/verify-kane.mjs",
-    "verify:loop": "node scripts/verify-loop.mjs"
+    "verify:loop": "node scripts/verify-loop.mjs",
+    "verify:repaired": "node scripts/verify-kane-repaired.mjs"
   },
-  "engines": {"node": ">=20"}
+  "engines": {
+    "node": ">=20"
+  }
 }
