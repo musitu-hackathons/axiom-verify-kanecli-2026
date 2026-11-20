@@ -12,6 +12,10 @@ on:
         description: Recheck the agent-repaired deployment with genuine Kane CLI (requires repository secrets)
         type: boolean
         default: false
+      sentinel:
+        description: Verify the deployed AXIOM Sentinel sandbox through real Kane CLI (requires secrets and public app URL)
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -68,5 +72,29 @@ jobs:
         if: always()
         with:
           name: kane-repaired-evidence
+          path: evidence/
+          retention-days: 7
+
+  kane_sentinel:
+    if: github.event_name == 'workflow_dispatch' && inputs.sentinel
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --global @testmuai/kane-cli
+      - name: Real browser acceptance against deployed Sentinel (fail closed)
+        env:
+          TESTMU_USERNAME: ${{ secrets.TESTMU_USERNAME }}
+          TESTMU_ACCESS_KEY: ${{ secrets.TESTMU_ACCESS_KEY }}
+          AXIOM_SENTINEL_URL: ${{ vars.AXIOM_SENTINEL_URL }}
+        run: |
+          test -n "$TESTMU_USERNAME" && test -n "$TESTMU_ACCESS_KEY" && test -n "$AXIOM_SENTINEL_URL" || { echo 'Missing Sentinel URL or TestMu secrets; NOT VERIFIED'; exit 1; }
+          npm run verify:sentinel
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kane-sentinel-evidence
           path: evidence/
           retention-days: 7

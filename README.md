@@ -80,3 +80,15 @@ The original deployed page and its 19-test baseline remain available as **before
 - **Agent source repair independently accepted:** https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/actions/runs/44698630143 (3/3 repaired scenarios PASS).
 - **Repaired live app:** https://axiom-verify-agent-repaired-mqlpg4.v2.appdeploy.ai/
 - **Reproduction instructions, evidence digests and source diff:** [docs/agent-repair-evidence.md](docs/agent-repair-evidence.md).
+
+---
+
+## AXIOM SENTINEL — adversarial payment-integrity lab (feature preview)
+
+A new sandbox-first extension has been developed in the independent hackathon repository to test financial invariants under adversarial conditions. This is **not** a real payment service. It uses synthetic accounts and deliberately fault-injected cases, with a separate ledger oracle that can block unsafe settlement even if the UI claims success.
+
+**Run:** `npm start` → `http://localhost:4173/sentinel` or the deployed `/sentinel` URL once published. Select among five simulated incidents: double-payment retry, overdraft, cross-tenant transfer, phantom credit and idempotency-key collision. Compare **Fault injected** versus **Guarded build**, inspect the actual debit/credit journal and independently computed release verdict. The existing AXIOM Verify demo remains at `/` to preserve the historical Kane evidence.
+
+**Development verification:** `npm test` checks engine invariants, negative cases, input validation, oracle independence, HTTP routing and declarative Kane browser objectives. `npm run verify:sentinel` requires an explicit **deployed Sentinel HTTPS URL** (`AXIOM_SENTINEL_URL`) and actual TestMu CI secrets; it performs real Kane browser runs only when invoked, never during regular builds. Use the manually dispatched `sentinel=true` GitHub Actions input once the deployed URL exists, and download the real provider evidence. See [the Sentinel runbook](docs/sentinel-runbook.md).
+
+**Status caution:** Previous Kane CLI evidence for the original NPV calculator does *not* verify Sentinel. A synthetic vulnerable/guarded mode toggle is **not** an automated source code repair; a separate live agent-to-Kane feedback loop and independent rerun will be required before claiming this stronger Sentinel submission complete.

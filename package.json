@@ -9,7 +9,8 @@
     "test": "node --test",
     "verify:kane": "node scripts/verify-kane.mjs",
     "verify:loop": "node scripts/verify-loop.mjs",
-    "verify:repaired": "node scripts/verify-kane-repaired.mjs"
+    "verify:repaired": "node scripts/verify-kane-repaired.mjs",
+    "verify:sentinel": "node scripts/verify-kane-sentinel.mjs"
   },
   "engines": {
     "node": ">=20"

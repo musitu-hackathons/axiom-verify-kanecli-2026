@@ -9,6 +9,10 @@ function select(pathname) {
   if (pathname === '/' || pathname === '/index.html') return resolve(root, 'public/index.html');
   if (pathname === '/app.js' || pathname === '/styles.css') return resolve(root,'public'+pathname);
   if (pathname === '/finance.mjs') return resolve(root,'src/finance.mjs');
+  if (pathname === '/sentinel' || pathname === '/sentinel/') return resolve(root, 'public/sentinel.html');
+  if (pathname === '/sentinel.js' || pathname === '/sentinel.css') return resolve(root,'public'+pathname);
+  if (pathname === '/sentinel/engine.mjs') return resolve(root,'src/sentinel/engine.mjs');
+  if (pathname === '/sentinel/oracle.mjs') return resolve(root,'src/sentinel/oracle.mjs');
   return null;
 }
 const server = createServer(async (req,res) => {
