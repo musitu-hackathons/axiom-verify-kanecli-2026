@@ -76,8 +76,7 @@ jobs:
           retention-days: 7
 
   kane_sentinel:
-    # Temporary branch-scoped single-use trigger. Remove immediately after run starts.
-    if: (github.event_name == 'workflow_dispatch' && inputs.sentinel) || (github.event_name == 'push' && github.ref == 'refs/heads/feature/axiom-sentinel-integrity-lab' && github.actor == 'evansmusitu' && github.event.head_commit.message == 'Run Sentinel Kane acceptance once')
+    if: github.event_name == 'workflow_dispatch' && inputs.sentinel
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
