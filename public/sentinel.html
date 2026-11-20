@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#080e1b" />
+  <meta name="description" content="AXIOM Sentinel — an adversarial financial-integrity verification sandbox, powered by independent ledger invariants." />
+  <title>AXIOM SENTINEL — Payment Integrity Lab</title>
+  <link rel="stylesheet" href="/sentinel.css" />
+  <script type="module" src="/sentinel.js"></script>
+</head>
+<body>
+  <div class="sentinel-shell">
+    <aside class="nav-rail" aria-label="Application navigation">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span>AX</span><span class="brand-spark">✦</span></div>
+        <div><strong>AXIOM<span class="brand-dot">.</span></strong><small>SENTINEL</small></div>
+      </div>
+      <div class="rail-label">CONTROL CENTER</div>
+      <nav class="nav-list">
+        <a class="nav-link active" href="#overview" aria-current="page"><span class="nav-icon">▦</span> Command center <span class="active-dot"></span></a>
+        <a class="nav-link" href="#scenarios"><span class="nav-icon">◎</span> Incident laboratory</a>
+        <a class="nav-link" href="#oracle"><span class="nav-icon">◈</span> Financial oracle</a>
+        <a class="nav-link" href="#audit"><span class="nav-icon">≡</span> Audit trail</a>
+      </nav>
+      <div class="rail-bottom">
+        <div class="rail-divider"></div>
+        <div class="rail-label">ENVIRONMENT</div>
+        <div class="rail-status"><span class="pulse-dot"></span><span>Synthetic sandbox <small>Local • No real funds</small></span></div>
+        <a class="rail-back" href="/">View AXIOM Verify ↗</a>
+      </div>
+    </aside>
+
+    <main class="main" id="overview">
+      <div class="topbar">
+        <div class="breadcrumbs"><span>MUSITU</span><span class="crumb-sep">/</span><span>AXIOM Sentinel</span><span class="crumb-sep">/</span><strong>Integrity Lab</strong></div>
+        <div class="top-actions"><span class="lab-badge"><span class="badge-led"></span> SIMULATED ENVIRONMENT</span><span class="top-version">LAB / 01</span></div>
+      </div>
+
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-mark">✳</span> FINANCIAL SYSTEMS, UNDER ATTACK</div>
+          <h1 id="hero-title">Every transaction<br /><em>has to add up.</em></h1>
+          <p>Can an AI-built payment system accidentally create money, pay twice, or breach a tenant boundary? Break the synthetic ledger. Watch an independent oracle decide whether it is safe to ship.</p>
+          <div class="hero-actions"><a class="button-primary" href="#scenarios">Enter attack lab <span aria-hidden="true">↗</span></a><a class="button-ghost" href="#oracle">How verification works <span aria-hidden="true">→</span></a></div>
+        </div>
+        <div class="hero-illustration" aria-hidden="true">
+          <div class="radar rings-1"></div><div class="radar rings-2"></div><div class="radar rings-3"></div>
+          <div class="radar-core"><div class="shield-symbol">◆</div><span>PAYMENT</span><b>INTEGRITY</b></div>
+          <div class="orbit-pill pill-a"><span class="mini-dot green"></span> DOUBLE ENTRY</div>
+          <div class="orbit-pill pill-b"><span class="mini-dot amber"></span> ADVERSARIAL</div>
+        </div>
+      </section>
+
+      <section class="stats-strip" aria-label="Verification metrics">
+        <div class="stat"><span class="stat-icon">⬡</span><div><span class="stat-value" id="stat-scenarios">05</span><span class="stat-label">Attack scenarios</span></div></div>
+        <div class="stat"><span class="stat-icon">✓</span><div><span class="stat-value" id="stat-controls">08</span><span class="stat-label">Oracle controls</span></div></div>
+        <div class="stat"><span class="stat-icon">◉</span><div><span class="stat-value" id="stat-funds">$0</span><span class="stat-label">Real money involved</span></div></div>
+        <div class="stat"><span class="stat-icon stat-icon-orange">⊘</span><div><span class="stat-value" id="stat-incidents">—</span><span class="stat-label">Rules violated in run</span></div></div>
+      </section>
+
+      <section id="scenarios" class="lab-section" aria-labelledby="lab-title">
+        <div class="section-heading"><div><div class="eyebrow">01 / ATTACK WORKBENCH</div><h2 id="lab-title">Incident laboratory</h2><p>Choose a threat, execute the payment flow and inspect what actually settled.</p></div><span class="section-hint">FIVE REPRODUCIBLE THREATS</span></div>
+        <div class="workspace-grid">
+          <div class="workspace-left">
+            <div class="panel scenario-panel">
+              <div class="panel-header"><h3>Threat scenarios</h3><span class="panel-index">SELECT ONE</span></div>
+              <div class="scenario-list" id="scenario-list" aria-label="Available simulated payment attacks"></div>
+              <div class="mode-wrap">
+                <div class="panel-header compact"><h3>Processor under test</h3><span class="panel-index">EXECUTION MODE</span></div>
+                <div class="mode-toggle" aria-label="Processor security mode" role="group">
+                  <button type="button" class="mode-button active" data-mode="vulnerable" aria-pressed="true"><span class="mode-indicator"></span> Fault injected</button>
+                  <button type="button" class="mode-button" data-mode="protected" aria-pressed="false"><span class="mode-indicator"></span> Guarded build</button>
+                </div>
+                <p class="mode-description" id="mode-description">Faults are deliberately injected into this synthetic processor to demonstrate unsafe behavior.</p>
+              </div>
+              <div class="run-area"><button type="button" class="run-button" id="run-incident"><span>▶</span> Run adversarial scenario <span class="run-arrow">↗</span></button><button type="button" id="reset-lab" class="reset-button" title="Restore default attack and rerun">↺</button></div>
+            </div>
+            <div class="panel scenario-info-panel"><div class="eyebrow">ATTACK OBJECTIVE</div><h3 id="scenario-title">The $7,500 double payment</h3><p id="scenario-description">A network retry sends a transfer twice.</p><div class="rule-box"><span>INVARIANT TO ENFORCE</span><strong id="scenario-rule">Each payment settles at most once.</strong></div></div>
+          </div>
+          <div class="workspace-right">
+            <div class="verdict-panel blocked" id="verdict-panel" role="status" aria-live="polite">
+              <div class="verdict-top"><span class="verdict-kicker">INDEPENDENT FINANCIAL ORACLE</span><span class="verdict-signal" id="verdict-signal">● RELEASE BLOCKED</span></div>
+              <div class="verdict-main"><div class="verdict-symbol" id="verdict-symbol">!</div><div><strong id="verdict-title">Financial invariant violated</strong><p id="verdict-description">Run the scenario to inspect the financial impact.</p></div></div>
+              <div class="verdict-foot"><span id="verdict-checks">— controls passed</span><span id="verdict-engine">INDEPENDENT JOURNAL CHECKS</span></div>
+            </div>
+            <div class="panel accounts-panel"><div class="panel-header"><h3>Account positions</h3><span class="panel-index">AFTER TRANSACTION</span></div><div id="accounts-grid" class="accounts-grid" aria-live="polite"></div></div>
+            <div class="panel journal-panel" id="audit"><div class="panel-header"><h3>Transaction journal</h3><span class="panel-index" id="journal-count">0 SETTLED</span></div><div class="table-scroll"><table class="journal-table"><thead><tr><th>REQUEST ID</th><th>DEBIT</th><th>CREDIT</th><th>STATE</th></tr></thead><tbody id="journal-body"></tbody></table></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="oracle-section" id="oracle" aria-labelledby="oracle-heading">
+        <div class="section-heading"><div><div class="eyebrow">02 / RELEASE GATE</div><h2 id="oracle-heading">Truth, independently verified.</h2><p>The oracle reconstructs the financial state from the journal—it does not trust the application's success banner.</p></div><div class="oracle-score"><strong id="oracle-score">—/8</strong><span>CHECKS PASSING</span></div></div>
+        <div class="oracle-layout">
+          <div class="panel invariants-panel"><div class="panel-header"><h3>Accounting & security invariants</h3><span class="panel-index">POLICY CONTRACT</span></div><div id="oracle-check-list" class="invariant-list" aria-live="polite"></div></div>
+          <div class="panel trace-panel"><div class="panel-header"><h3>Execution trace</h3><span class="panel-index">REPLAYABLE</span></div><ol class="trace-list" id="trace-list"></ol></div>
+        </div>
+      </section>
+
+      <section class="bottom-notice"><span class="bottom-icon">ⓘ</span><p><strong>Verification boundary.</strong> This is an educational, client-side simulation using synthetic accounts and intentionally vulnerable test modes. It is not a bank, payment processor or production security audit. Only genuine external Kane CLI results count as browser-verification evidence.</p><a href="https://github.com/musitu-hackathons/axiom-verify-kanecli-2026" target="_blank" rel="noreferrer">Source ↗</a></section>
+      <footer class="footer"><span>© 2026 MUSITU · AXIOM SENTINEL</span><span>ENGINEERED TO QUESTION THE GREEN CHECKMARK.</span></footer>
+    </main>
+  </div>
+</body>
+</html>

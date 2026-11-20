@@ -1,0 +1,73 @@
+{
+  "evidence_kind": "REAL_KANE_CLI_BROWSER_ACCEPTANCE",
+  "provider": "TestMu Kane CLI",
+  "verified": true,
+  "checked_at_utc": "2026-11-20T09:02:18.626Z",
+  "public_app_url": "https://axiom-sentinel-payment-integrity-lab-eq0z0z.v2.appdeploy.ai/",
+  "source_branch": "feature/axiom-sentinel-integrity-lab",
+  "verified_commit": "948da9402c4bc8ff9b91c919ec3c18f8f39b1e1b",
+  "github_actions_run": "https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/actions/runs/44705995556",
+  "artifact_name": "kane-sentinel-evidence",
+  "artifact_sha256": "0d810d532178f279ba1e90337f64a7826788ed8263836407de65447794ca8d8d",
+  "artifact_expires_at_utc": "2026-11-27T09:02:18Z",
+  "objective_count": 4,
+  "objectives": [
+    {
+      "objective": "duplicate-unsafe",
+      "expected_provider_result": "passed",
+      "actual_provider_result": "passed",
+      "acceptance_criterion_met": true,
+      "cli_exit_code": 0,
+      "stream_started": true,
+      "result_present": true,
+      "kane_cli_version": "0.10.6",
+      "provider_duration_seconds": 75.3,
+      "provider_credits_consumed": 34.905,
+      "public_test_report_url": "https://test-manager.lambdatest.com/projects/01M7VY86Q3814EVERRJ7DZJG3X/test-cases/01M7W2H1W5Z15H213CRY65HQAQ/dashboard/share/US_KL25NDJ9M5T0IO3XJ34N3UWQHG98C4BQS344KJLJRJEJUZ2N6G8DM47HF6A9YPB3?type=summary&agentView=true&fqdn=summary-page",
+      "summary": "Opened the AXIOM SENTINEL Payment Integrity Lab and ran the disclosed synthetic “$7,500 double payment” scenario with the fault injected.\nThe independent financial oracle showed “RELEASE BLOCKED,” and the transaction journal showed two SETTLED entries using the same request ID, pay-invoice-042.\nThe displayed balances were $5,000.00 for Acme Operating and $16,500.00 for Acme Vendor.\nThe visible evidence and idempotency failure were: “Duplicate settled ID(s): pay-invoice-042.”"
+    },
+    {
+      "objective": "duplicate-guarded",
+      "expected_provider_result": "passed",
+      "actual_provider_result": "passed",
+      "acceptance_criterion_met": true,
+      "cli_exit_code": 0,
+      "stream_started": true,
+      "result_present": true,
+      "kane_cli_version": "0.10.6",
+      "provider_duration_seconds": 91.2,
+      "provider_credits_consumed": 35.473,
+      "public_test_report_url": "https://test-manager.lambdatest.com/projects/01M7VY86Q3814EVERRJ7DZJG3X/test-cases/01M7W2KSV7G8R43YANV72K7ZW8/dashboard/share/US_TRYA4WDJB9FXRA1D23JQKH6YNHZCEX4QTCF62OVO5FRG3E4HCUMDWYMECKLKPRX4?type=summary&agentView=true&fqdn=summary-page",
+      "summary": "Opened the AXIOM SENTINEL Payment Integrity Lab, selected “The $7,500 double payment,” chose the Guarded build, and ran the adversarial scenario.\nThe financial oracle visibly showed RELEASE SAFE with 8 / 8 controls passed.\nThe transaction journal showed exactly 1 SETTLED payment (pay-invoice-042), with Acme Operating at $12,500.00 and Acme Vendor at $9,000.00.\nThe execution trace showed DUPLICATE SUPPRESSED, indicating the retried payment was ignored after the original settlement."
+    },
+    {
+      "objective": "overdraft-and-tenant",
+      "expected_provider_result": "passed",
+      "actual_provider_result": "passed",
+      "acceptance_criterion_met": true,
+      "cli_exit_code": 0,
+      "stream_started": true,
+      "result_present": true,
+      "kane_cli_version": "0.10.6",
+      "provider_duration_seconds": 145.1,
+      "provider_credits_consumed": 64.015,
+      "public_test_report_url": "https://test-manager.lambdatest.com/projects/01M7VY86Q3814EVERRJ7DZJG3X/test-cases/01M7W2Q2BHXF3R53AMF6S564EC/dashboard/share/US_ZAO164YHFLSFM2HLJ60E5NWOXI4WXDGKQSWORO9RF6A7W315X8W739NYNWF7OTUC?type=summary&agentView=true&fqdn=summary-page",
+      "summary": "You asked to switch from Cross-tenant transfer back to Fault injected, then select Guarded build again and report the interface results.\nAfter returning to Fault injected, the interface showed RELEASE BLOCKED and the “No cross-tenant settlements” control failed, with 1 unauthorized cross-tenant settlement.\nAfter selecting Guarded build again, the interface showed RELEASE SAFE and 0 settled transactions.\nThe execution trace reported: “SANDBOX INITIALIZED — Synthetic ledger initialized in PROTECTED mode. No external payments.” and “CROSS TENANT DENIED — Initiator may operate only accounts in its own tenant.”"
+    },
+    {
+      "objective": "accounting-and-key",
+      "expected_provider_result": "passed",
+      "actual_provider_result": "passed",
+      "acceptance_criterion_met": true,
+      "cli_exit_code": 0,
+      "stream_started": true,
+      "result_present": true,
+      "kane_cli_version": "0.10.6",
+      "provider_duration_seconds": 199.9,
+      "provider_credits_consumed": 89.327,
+      "public_test_report_url": "https://test-manager.lambdatest.com/projects/01M7VY86Q3814EVERRJ7DZJG3X/test-cases/01M7W2VYPNBK1FS901GWW75VBJ/dashboard/share/US_1F05PP15M9UQ4KFA9TNGEA0NJ8H4AL3XUDWZGJKR3YV23JN1G1R8NHWIS20FE6ZM?type=summary&agentView=true&fqdn=summary-page",
+      "summary": "Reviewed the AXIOM SENTINEL Payment Integrity Lab for the Phantom credit and Idempotency collision scenarios in both Fault injected and Guarded build modes.\nFor Phantom credit with Fault injected, the page showed RELEASE BLOCKED, a $3,000.00 debit and $3,050.00 credit, and a failed total-money-supply check; the visible evidence said: “2 independent controls failed: total money supply conserved; debit and credit legs balance.”\nFor Phantom credit with Guarded build, the page showed RELEASE SAFE and the visible evidence said: “All financial invariants hold.”\nFor Idempotency collision with Fault injected, the page showed RELEASE BLOCKED with 2 SETTLED; the visible evidence said: “Duplicate settled ID(s): invoice-idem-009.”\nFor Idempotency collision with Guarded build, the page showed RELEASE SAFE with 1 SETTLED and an IDEMPOTENCY CONFLICT trace; the visible evidence said: “Expected policy decision observed.”"
+    }
+  ],
+  "limitation": "Real Kane browser checks verify synthetic app behavior. This proof does not assert that a Sentinel-specific AI coding agent edited the vulnerable source and reran Kane."
+}

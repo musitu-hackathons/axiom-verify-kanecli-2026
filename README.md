@@ -80,3 +80,23 @@ The original deployed page and its 19-test baseline remain available as **before
 - **Agent source repair independently accepted:** https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/actions/runs/44698630143 (3/3 repaired scenarios PASS).
 - **Repaired live app:** https://axiom-verify-agent-repaired-mqlpg4.v2.appdeploy.ai/
 - **Reproduction instructions, evidence digests and source diff:** [docs/agent-repair-evidence.md](docs/agent-repair-evidence.md).
+
+---
+
+## AXIOM SENTINEL — adversarial payment-integrity lab (feature preview)
+
+A new sandbox-first extension has been developed in the independent hackathon repository to test financial invariants under adversarial conditions. This is **not** a real payment service. It uses synthetic accounts and deliberately fault-injected cases, with a separate ledger oracle that can block unsafe settlement even if the UI claims success.
+
+**Run:** `npm start` → `http://localhost:4173/sentinel`. Public standalone preview: https://axiom-sentinel-payment-integrity-lab-eq0z0z.v2.appdeploy.ai/ . Select among five simulated incidents: double-payment retry, overdraft, cross-tenant transfer, phantom credit and idempotency-key collision. Compare **Fault injected** versus **Guarded build**, inspect the actual debit/credit journal and independently computed release verdict. The existing AXIOM Verify demo remains at `/` to preserve the historical Kane evidence.
+
+**Development verification:** `npm run sentinel:gate` produces a machine-readable synthetic policy report and fails if any of the five vulnerability/guarded pairs violates the expected oracle outcomes. `npm test` checks engine invariants, negative cases, input validation, oracle independence, HTTP routing and declarative Kane browser objectives. `npm run verify:sentinel` requires an explicit **deployed Sentinel HTTPS URL** (`AXIOM_SENTINEL_URL`) and actual TestMu CI secrets; it performs real Kane browser runs only when invoked, never during regular builds. Use the manually dispatched `sentinel=true` GitHub Actions input for external verification of the deployed Sentinel preview, and download the real provider evidence. See [the Sentinel runbook](docs/sentinel-runbook.md).
+
+**Externally verified Sentinel browser behavior:** [TestMu Kane CLI v0.10.6 passed all four Sentinel objectives on 20 November](docs/proofs/sentinel-kane-2026-11-20.json). Original GitHub Actions run: https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/actions/runs/44705995556. Kane observed and asserted blocked vulnerable incidents, guarded passes, account balances and ledger invariants against the public Sentinel deployment. A separate source-level regression-to-repair reproduction has also now been verified; see the proof below.
+
+**Scope and authenticity:** The original four-objective Kane run verifies the Sentinel UI; it is **not** source-repair evidence by itself. The separate AI-assistant-led source patch reproduction below supplies the missing red-to-green proof. Switching the browser mode is **not** an automated source edit; the documented repair was a GitHub source commit after Kane's independently observed failure. This is not an unattended arbitrary-code repair agent.
+
+## Sentinel-specific real Kane failure → AI-assisted source patch → passing Kane rerun
+
+The isolated `repro/sentinel-idempotency-closedloop` branch deliberately introduced an invoice idempotency bypass, producing 51/54 local test passes and [a real failed Kane `duplicate-guarded` assertion](https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/actions/runs/44708979561). A ChatGPT-assisted [one-file source patch](https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/commit/3c1c6522d34084e5d9ff4cddd455f89aea049dda) removed the bypass; 54/54 tests and the 10-path synthetic gate passed; after redeployment [all four actual Kane browser checks passed](https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/actions/runs/44710070648) with genuine provider NDJSON. See the [public-safe source-repair proof](docs/proofs/sentinel-source-repair-2026-11-20.md) and [structured provider evidence](docs/proofs/sentinel-source-repair-2026-11-20.json). The prototype still uses synthetic in-memory funds; this is not production payment safety certification.
+
+**Next release gate:** Capture the authentic four-minute [Sentinel demonstration storyboard](docs/sentinel-demo-runbook.md) with source diff, both Kane runs and on-screen synthetic disclosures; obtain an accessible YouTube URL, review PR #2 and submit the official form. Neither video publication nor contest submission has occurred.
