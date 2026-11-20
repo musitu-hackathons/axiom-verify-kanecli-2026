@@ -20,8 +20,7 @@ jobs:
           node-version: '22'
       - run: npm test
   kane:
-    # Temporary, exact-match owner-only push trigger; removes reliance on browser dispatch.
-    if: (github.event_name == 'workflow_dispatch' && inputs.kane) || (github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor == 'evansmusitu' && github.event.head_commit.message == 'Run genuine Kane CLI verification once')
+    if: github.event_name == 'workflow_dispatch' && inputs.kane
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
