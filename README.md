@@ -47,8 +47,8 @@ The simulator fault is *intentional, transparent and isolated*. It is not claime
 - [x] New independent hackathon code (created November 19, 2026)
 - [x] Functional web app, 19 passing local numeric/parser unit tests and runnable setup
 - [x] Real Kane CLI invocation and fail-closed report parser **implemented**
-- [ ] TestMu AI account/credits and Kane CLI run verified with genuine evidence
-- [ ] Agent visibly edits source in response to a real Kane failure and reruns it
+- [x] Genuine TestMu Kane CLI runs verified with NDJSON and GitHub Actions artifacts (20 Nov 2026)
+- [x] AI-assisted repair committed after genuine Kane failure, with TDD red/green proof and independent Kane rerun
 - [x] Separate **public GitHub repository** created on November 19, 2026 under the new `musitu-hackathons` organization: https://github.com/musitu-hackathons/axiom-verify-kanecli-2026
 - [ ] Recorded YouTube video (3–5 minutes)
 - [x] Two public LinkedIn launch posts published 19 November (see `docs/submission-kit.md`)
@@ -68,8 +68,15 @@ ChatGPT (GPT-6) assisted with original code generation, tests, acceptance object
 
 This is an independent competition repository within the dedicated `musitu-hackathons` GitHub organization. It contains **only** this new code and tests, not a copy or fork of any production MUSITU repository. It does not give viewers access to any private repository or rights to modify other code. Other already-public repositories elsewhere on GitHub remain independently publicly accessible. TestMu credentials are absent from version control; use repository-specific Actions secrets. GitLab remains an optional private development mirror.
 
-**Official hackathon submission has not been sent; genuine Kane execution and the 3–5 minute demo are still required.**
+**The original and repaired genuine Kane CLI verification runs passed their respective acceptance criteria. Official hackathon submission is still pending the 3–5 minute YouTube video and final form.**
 
 ## Agent response to actual Kane failure (20 November 2026)
 
-The original deployed page and its 19-test baseline remain available as **before** evidence. See [AI-assisted source repair and test evidence](docs/agent-repair-evidence.md) for genuine TestMu Kane CLI v0.10.6 assertion failure, the minimal source patch, a recorded red-green test cycle, and follow-up verification. The separately published **repaired** app is https://axiom-verify-agent-repaired-mqlpg4.v2.appdeploy.ai/. A real independent Kane rerun on that version is required before calling the repair browser-verified. The revised source has 22 passing local tests. No private MUSITU production files, credentials or customer data were used.
+The original deployed page and its 19-test baseline remain available as **before** evidence. See [AI-assisted source repair and test evidence](docs/agent-repair-evidence.md) for genuine TestMu Kane CLI v0.10.6 assertion failure, the minimal source patch, a recorded red-green test cycle, and follow-up verification. The separately published **repaired** app is https://axiom-verify-agent-repaired-mqlpg4.v2.appdeploy.ai/. The independent post-repair Kane rerun passed 3/3 live browser objectives on 20 November 2026: https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/actions/runs/44698630143. The revised source has 22 passing local tests. No private MUSITU production files, credentials or customer data were used.
+
+## Genuine Kane browser evidence links
+
+- **Bug reproduced and reported:** https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/actions/runs/44696347231 (baseline PASS, deliberate mismatch FAIL, recovery PASS).
+- **Agent source repair independently accepted:** https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/actions/runs/44698630143 (3/3 repaired scenarios PASS).
+- **Repaired live app:** https://axiom-verify-agent-repaired-mqlpg4.v2.appdeploy.ai/
+- **Reproduction instructions, evidence digests and source diff:** [docs/agent-repair-evidence.md](docs/agent-repair-evidence.md).

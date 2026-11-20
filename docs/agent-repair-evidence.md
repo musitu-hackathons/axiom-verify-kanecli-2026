@@ -28,6 +28,19 @@ The coding agent changed the historical regression adapter to call the existing 
 - **REGRESSION:** `npm test` → 22 passed, 0 failed (exit 0). The original intentionally-buggy test was replaced with the corrected adapter contract, while the before-patch source and Kane failure remain in the repository history and original deployment.
 - **Browser before/after:** The original public demo remains available. The repaired deployment was independently smoke-tested by a public browser run at https://agent.tinyfish.ai/runs/95281b19-e0e5-4369-851b-2c5c576ae2a9, confirming baseline $41.32, the historical fault path ON also $41.32 with `REGRESSION PATCHED`, zero rate $200.00 and loss-making -$392.56 / REJECT. This smoke test is not Kane evidence.
 
-## Remaining gate
+## Independent real-browser rerun completed (20 November 2026)
 
-Run `AXIOM_VERIFY_URL=https://axiom-verify-agent-repaired-mqlpg4.v2.appdeploy.ai/ npm run verify:repaired` with real TestMu credentials in GitHub Actions. Record the new run's genuine NDJSON and only then mark repair verified. Do not infer this from the local test suite.
+**Repaired Kane Actions run:** https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/actions/runs/44698630143  
+**Artifact:** `kane-repaired-evidence`, ID `14611688040`, SHA-256 `f771df1f2d27a1f6865b1ed12bf4132bdfdbe53b2b2dda4715f4695fc7de95b4`.
+
+TestMu Kane CLI v0.10.6 emitted genuine `stream_start` and `run_end` NDJSON records for each repaired URL objective. The `kane-summary.json` file has `verified: true`. Independently checked against the downloaded archive:
+
+| Objective | Real Kane outcome | Exit code | Evidence |
+| --- | --- | --- | --- |
+| `postfix-baseline` | passed | 0 | NPV $41.32, ACCEPT |
+| `postfix-fault-path` | passed | 0 | Historical fault path ON still $41.32 and REGRESSION PATCHED |
+| `postfix-recovery` | passed | 0 | Zero rate $200.00; loss-making -$392.56, REJECT |
+
+**Result:** The independent *post-repair* Kane browser acceptance checks passed. This means the source repair was followed by a fresh genuine TestMu rerun, rather than only a unit test or a non-Kane smoke test. The app is a bounded educational demonstration, not a certified financial system.
+
+**Remaining hackathon deliverables:** recorded 3–5 minute YouTube video, official entry form and confirmation receipt.
