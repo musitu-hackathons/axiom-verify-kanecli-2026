@@ -83,8 +83,7 @@ jobs:
           retention-days: 7
 
   kane_sentinel:
-    # Reproduction-only one-shot trigger. Must be removed after this push.
-    if: (github.event_name == 'workflow_dispatch' && inputs.sentinel) || (github.event_name == 'push' && github.ref == 'refs/heads/repro/sentinel-idempotency-closedloop' && github.actor == 'evansmusitu' && github.event.head_commit.message == 'Reproduce Sentinel idempotency bug with genuine Kane once')
+    if: github.event_name == 'workflow_dispatch' && inputs.sentinel
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
