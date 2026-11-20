@@ -60,9 +60,7 @@ export class SandboxLedger {
     if (!src || !dst || from === to) return deny('INVALID_ACCOUNTS', 'Source and destination must be distinct known accounts.');
 
     const fingerprint = requestFingerprint(request);
-    // INTENTIONAL COMPETITION REPRODUCTION DEFECT: one retry key bypasses the guard.
-    // This synthetic regression exists ONLY in the isolated closed-loop exercise.
-    if (this.mode === 'protected' && this.idempotency.has(requestId) && requestId !== 'pay-invoice-042') {
+    if (this.mode === 'protected' && this.idempotency.has(requestId)) {
       if (this.idempotency.get(requestId) === fingerprint) return deny('DUPLICATE_SUPPRESSED', 'Retry ignored: payment already settled.', 'duplicate');
       return deny('IDEMPOTENCY_CONFLICT', 'Request ID reused with a changed amount or destination.');
     }
