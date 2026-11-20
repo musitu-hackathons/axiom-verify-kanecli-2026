@@ -11,5 +11,5 @@ test('negative initial investment rejected',()=>assert.throws(()=>npv(-1,1,[100]
 test('invalid annual discount rate rejected',()=>assert.throws(()=>npv(100,-100,[100]),/Discount rate/));
 test('non finite cashflow rejected',()=>assert.throws(()=>npv(100,10,[Infinity]),/finite/));
 test('array size limit enforced',()=>assert.throws(()=>npv(100,2,Array(31).fill(1)),/1–30/));
-test('injected regression is distinct from correct multi-period outcome',()=>assert.ok(Math.abs(injectedRegression(1000,10,[600,600])-npv(1000,10,[600,600]))>40));
+test('historical regression adapter is repaired and equals correct NPV',()=>almost(injectedRegression(1000,10,[600,600]),npv(1000,10,[600,600])));
 test('money formatter is finite-only',()=>assert.throws(()=>money(NaN),/finite/));

@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Calculate the baseline NPV correctly",
+    "sanity": true,
+    "viewport": "desktop",
+    "covers": [
+      "baseline investment calculation",
+      "NPV and acceptance decision"
+    ],
+    "description": "The repaired app keeps the correct two-period baseline calculation and visible acceptance state.",
+    "steps": [
+      "Open the repaired AXIOM Verify page",
+      "Select Baseline investment",
+      "Click Evaluate scenario"
+    ],
+    "expected": "Net present value shows $41.32 and decision ACCEPT."
+  },
+  {
+    "name": "Historical bug path is genuinely corrected",
+    "viewport": "mobile",
+    "covers": [
+      "historical injected-regression path",
+      "repaired status notice",
+      "mobile interaction"
+    ],
+    "description": "The route Kane previously caught must no longer discount period two as period one.",
+    "steps": [
+      "Open the repaired page in a mobile viewport",
+      "Select Baseline investment",
+      "Turn ON Re-test historical fault path",
+      "Click Evaluate scenario"
+    ],
+    "expected": "Net present value remains $41.32, decision remains ACCEPT, and REGRESSION PATCHED is visible."
+  },
+  {
+    "name": "Zero-discount and loss-making scenarios stay correct",
+    "viewport": "desktop",
+    "covers": [
+      "scenario preset switching",
+      "zero-rate calculation",
+      "negative decision"
+    ],
+    "description": "Repaired branch must preserve both independent validated examples.",
+    "steps": [
+      "Select Zero discount rate and Evaluate scenario",
+      "Confirm net present value $200.00",
+      "Select Loss-making case and Evaluate scenario"
+    ],
+    "expected": "Zero rate shows $200.00; Loss-making case shows -$392.56 and REJECT."
+  },
+  {
+    "name": "Invalid cash flows are rejected",
+    "viewport": "mobile",
+    "covers": [
+      "numeric input validation",
+      "invalid input feedback"
+    ],
+    "description": "Invalid values cannot be mistaken for a successful financial calculation.",
+    "steps": [
+      "Open repaired page",
+      "Clear Future cash flows field",
+      "Click Evaluate scenario"
+    ],
+    "expected": "Error message appears and the NPV output is not shown as a valid monetary result."
+  }
+]

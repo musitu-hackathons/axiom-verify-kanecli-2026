@@ -8,6 +8,10 @@ on:
         description: Run genuine Kane CLI against the published AXIOM Verify demo (requires repository secrets)
         type: boolean
         default: false
+      repair:
+        description: Recheck the agent-repaired deployment with genuine Kane CLI (requires repository secrets)
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -40,5 +44,29 @@ jobs:
         if: always()
         with:
           name: kane-evidence
+          path: evidence/
+          retention-days: 7
+
+  kane_repaired:
+    if: (github.event_name == 'workflow_dispatch' && inputs.repair) || (github.event_name == 'push' && github.ref == 'refs/heads/agent-repair-kane-2026-11-20' && github.actor == 'evansmusitu' && github.event.head_commit.message == 'Agent repairs Kane-detected NPV bug and reruns verified browser')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --global @testmuai/kane-cli
+      - name: Kane CLI acceptance on repaired live app (fail closed)
+        env:
+          TESTMU_USERNAME: ${{ secrets.TESTMU_USERNAME }}
+          TESTMU_ACCESS_KEY: ${{ secrets.TESTMU_ACCESS_KEY }}
+          AXIOM_VERIFY_URL: https://axiom-verify-agent-repaired-mqlpg4.v2.appdeploy.ai/
+        run: |
+          test -n "$TESTMU_USERNAME" && test -n "$TESTMU_ACCESS_KEY" || { echo 'Missing TestMu credentials; NOT VERIFIED'; exit 1; }
+          npm run verify:repaired
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kane-repaired-evidence
           path: evidence/
           retention-days: 7

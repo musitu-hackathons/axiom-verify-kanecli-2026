@@ -25,8 +25,10 @@ export function money(value) {
   ensureFinite(value, 'Value');
   return new Intl.NumberFormat('en-US', {style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:2}).format(value);
 }
-/** A *deliberately wrong* sandbox adapter, never used by production calculation. */
+/** The historical regression adapter, now repaired after Kane CLI found the bug.
+ *  Reuse the validated period-aware NPV path rather than discounting every
+ *  cash flow as though it arrived in year one.
+ */
 export function injectedRegression(initial, ratePercent, futureCashFlows) {
-  const r = ratePercent / 100;
-  return futureCashFlows.reduce((sum, cf) => sum + cf / (1 + r), -initial);
+  return npv(initial, ratePercent, futureCashFlows);
 }
