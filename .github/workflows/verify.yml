@@ -27,6 +27,13 @@ jobs:
         with:
           node-version: '22'
       - run: npm test
+      - run: npm run sentinel:gate
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sentinel-synthetic-ci-gate
+          path: evidence/sentinel-ci-gate.json
+          retention-days: 7
   kane:
     if: github.event_name == 'workflow_dispatch' && inputs.kane
     runs-on: ubuntu-latest
@@ -88,7 +95,7 @@ jobs:
         env:
           TESTMU_USERNAME: ${{ secrets.TESTMU_USERNAME }}
           TESTMU_ACCESS_KEY: ${{ secrets.TESTMU_ACCESS_KEY }}
-          AXIOM_SENTINEL_URL: https://axiom-sentinel-payment-integrity-lab-eq0z0z.v2.appdeploy.ai/
+          AXIOM_SENTINEL_URL: ${{ vars.AXIOM_SENTINEL_URL }}
         run: |
           test -n "$TESTMU_USERNAME" && test -n "$TESTMU_ACCESS_KEY" && test -n "$AXIOM_SENTINEL_URL" || { echo 'Missing Sentinel URL or TestMu secrets; NOT VERIFIED'; exit 1; }
           npm run verify:sentinel

@@ -10,7 +10,8 @@
     "verify:kane": "node scripts/verify-kane.mjs",
     "verify:loop": "node scripts/verify-loop.mjs",
     "verify:repaired": "node scripts/verify-kane-repaired.mjs",
-    "verify:sentinel": "node scripts/verify-kane-sentinel.mjs"
+    "verify:sentinel": "node scripts/verify-kane-sentinel.mjs",
+    "sentinel:gate": "node scripts/sentinel-gate.mjs"
   },
   "engines": {
     "node": ">=20"

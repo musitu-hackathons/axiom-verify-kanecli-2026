@@ -76,7 +76,7 @@
 
 - [x] **Step 1: Validate baseline original page and source independence.**
 - [ ] **Step 2: Verify new route and core scenarios in an independently deployed browser, test suite in CI.**
-- [ ] **Step 3: Deploy the demo if a controlled deployment path is available; never substitute a mocked screenshot for working UI.**
+- [x] **Step 3: Deploy the demo if a controlled deployment path is available; never substitute a mocked screenshot for working UI.**
 - [ ] **Step 4: Open a PR against `main` for review, not merge it without acceptance.**
 - [ ] **Step 5: Reverify GitHub branch, review CI outcome, and report unfinished real Kane and autonomous-repair requirements accurately.**
 
@@ -87,3 +87,7 @@
 - The browser route is `/sentinel`; original root remains AXIOM Verify to preserve historical Kane evidence.
 - Refusal, duplicate-suppression and key-conflict attempts produce journal entries only for actual settled transfers; rejected attempts remain in the audit trace.
 - Failed browser or API checks block release. If Kane API or deployment is unavailable, the public artifact is called a tested prototype, not an accepted Kane run.
+
+## Additional executed CI deliverable
+
+`src/sentinel/gate.mjs` and `scripts/sentinel-gate.mjs` implement a separate synthetic 10-run release matrix. `test/sentinel-gate.test.mjs` checks all five positive and five negative policy results plus two fail-closed oracle mutation cases. The GitHub unit workflow runs `npm run sentinel:gate` and attaches `evidence/sentinel-ci-gate.json`. This is **not** external Kane acceptance.
