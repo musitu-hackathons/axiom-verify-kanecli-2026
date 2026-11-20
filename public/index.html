@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#07101b" />
+  <title>AXIOM Verify | Evidence-led release gate</title>
+  <meta name="description" content="Test a quantitative calculation in a real user journey, inject a regression, and close the loop using Kane CLI." />
+  <link rel="stylesheet" href="/styles.css" />
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header class="topbar"><div class="brand"><div class="logo">A<span>V</span></div><div><strong>AXIOM <i>VERIFY</i></strong><small>MUSITU · KaneCLI Hackathon '26</small></div></div><div class="header-right"><span class="live-dot"></span> Interactive release lab <a href="https://www.kaneclihack.sh/" target="_blank" rel="noopener noreferrer">Challenge ↗</a></div></header>
+  <main>
+    <section class="hero"><div class="eyebrow">01 / FINANCIAL ASSURANCE WORKBENCH <span>·</span> Built for evidence, not assumptions</div><h1>Agents ship code.<br/><em>Proof earns trust.</em></h1><p>Work through an investment scenario, expose a controlled calculation regression, and turn a real-browser Kane CLI result into an actionable fix request.</p><div class="hero-metrics"><div><strong>03</strong><span>Acceptance objectives</span></div><div><strong>02</strong><span>Release conditions</span></div><div><strong>0</strong><span>Fabricated Kane results</span></div></div></section>
+    <div class="workspace">
+      <section class="panel model"><div class="section-head"><div><div class="eyebrow">SIMULATION / 01</div><h2>Valuation engine</h2></div><span class="pill">Deterministic NPV</span></div><p class="muted">Calculate the net present value of cash flows. This is an educational demonstration, not investment advice.</p>
+        <div class="preset-row" role="group" aria-label="Scenario presets"><button type="button" data-preset="baseline" class="preset active">Baseline investment</button><button type="button" data-preset="zero">Zero discount rate</button><button type="button" data-preset="rejection">Loss-making case</button></div>
+        <form id="valuation-form" novalidate><div class="input-grid"><label>Initial investment (USD)<input id="initial" name="initial" type="number" min="0" step="any" required value="1000" /></label><label>Discount rate (%)<input id="rate" name="rate" type="number" min="-99.99" max="1000" step="any" required value="10" /></label></div><label>Future cash flows (USD, comma-separated)<input id="cashflows" name="cashflows" type="text" required value="600, 600" /></label><button type="submit" class="primary">Evaluate scenario <span aria-hidden="true">→</span></button></form>
+        <div class="outcome" role="status" aria-live="polite"><div class="outcome-caption">Net present value</div><output id="npv" for="initial rate cashflows">$41.32</output><div class="decision"><span class="status-dot"></span><strong id="decision">ACCEPT</strong> <span id="decision-info">Positive NPV under the stated assumptions</span></div><p id="formula">NPV = -1,000.00 + 600.00 ÷ 1.1¹ + 600.00 ÷ 1.1²</p><div id="error" class="error" role="alert" hidden></div></div>
+      </section>
+      <aside class="side"><section class="panel lab"><div class="section-head"><div><div class="eyebrow">ADVERSARIAL TEST / 02</div><h2>Regression lab</h2></div><span class="pill warning">Sandbox only</span></div><p class="muted">Inject a disclosed fault that mistakenly discounts every cash flow as if it arrived in year one. Kane should reject this incorrect UI result.</p><label class="switchline"><span><strong>Inject calculation fault</strong><small>Deliberately wrong implementation</small></span><input id="inject-fault" type="checkbox" role="switch"/><span class="slider" aria-hidden="true"></span></label><div class="notice" id="fault-status">SAFE MODE · Correct model active</div></section>
+      <section class="panel spec"><div class="section-head"><div><div class="eyebrow">VERIFICATION / 03</div><h2>Release protocol</h2></div></div><ol class="steps"><li><span>1</span><div><strong>Agent writes the app</strong><small>Source and acceptance cases are versioned together</small></div></li><li><span>2</span><div><strong>Kane checks the browser</strong><small>Actual outcome, screenshots and exit status required</small></div></li><li><span>3</span><div><strong>Agent receives failure</strong><small>Failure evidence is passed into a constrained repair prompt</small></div></li><li><span>4</span><div><strong>Release only on green</strong><small>Fail closed if Kane cannot authenticate or run</small></div></li></ol><div class="gate" id="release-gate">Live Kane verification: <strong>NOT YET RUN</strong></div></section></aside>
+    </div>
+    <footer><span>AXIOM VERIFY © 2026 MUSITU · Independent hackathon demonstration</span><span>No customer data · No external APIs · No live trades</span></footer>
+  </main>
+</body>
+</html>

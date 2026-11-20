@@ -1,0 +1,44 @@
+name: AXIOM Verify checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      kane:
+        description: Run genuine Kane CLI against the published AXIOM Verify demo (requires repository secrets)
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm test
+  kane:
+    if: github.event_name == 'workflow_dispatch' && inputs.kane
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --global @testmuai/kane-cli
+      - name: Execute actual Kane CLI browser acceptance (fail closed)
+        env:
+          TESTMU_USERNAME: ${{ secrets.TESTMU_USERNAME }}
+          TESTMU_ACCESS_KEY: ${{ secrets.TESTMU_ACCESS_KEY }}
+          AXIOM_VERIFY_URL: https://axiom-verify-kanecli-zhpdm6.v2.appdeploy.ai/
+        run: |
+          test -n "$TESTMU_USERNAME" && test -n "$TESTMU_ACCESS_KEY" || { echo 'Missing TestMu credentials; NOT VERIFIED'; exit 1; }
+          npm run verify:kane
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kane-evidence
+          path: evidence/
+          retention-days: 7

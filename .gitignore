@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.*
+!.env.example
+evidence/*.json
+evidence/*.ndjson
+evidence/*.evidence
+evidence/agent-repair-request.md
+evidence/*.log
+evidence/*.png
+evidence/*.mp4
+.DS_Store

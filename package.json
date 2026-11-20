@@ -1,0 +1,14 @@
+{
+  "name": "axiom-verify-kanecli-2026",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "AXIOM Verify: a finance release-gate demonstration with real-browser Kane CLI acceptance and fail-closed agent loop",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test",
+    "verify:kane": "node scripts/verify-kane.mjs",
+    "verify:loop": "node scripts/verify-loop.mjs"
+  },
+  "engines": {"node": ">=20"}
+}

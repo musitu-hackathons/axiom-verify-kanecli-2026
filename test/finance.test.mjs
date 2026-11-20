@@ -1,0 +1,15 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { npv,decision,injectedRegression,money } from '../src/finance.mjs';
+const almost=(a,b)=>assert.ok(Math.abs(a-b)<0.00001,`expected ${b}, received ${a}`);
+test('baseline two-period project: independently known expected 41.322314',()=>almost(npv(1000,10,[600,600]), 41.32231404958674));
+test('zero discount rate computes undiscounted total',()=>assert.equal(npv(1000,0,[600,600]),200));
+test('negative NPV yields reject decision',()=>assert.equal(decision(npv(1000,10,[350,350])),'REJECT'));
+test('negative cash flow is supported',()=>almost(npv(100,10,[-10,200]),56.198347107438));
+test('does not round before deciding marginally positive project',()=>assert.equal(decision(npv(0,0,[0.001])),'ACCEPT'));
+test('negative initial investment rejected',()=>assert.throws(()=>npv(-1,1,[100]),/cannot be negative/));
+test('invalid annual discount rate rejected',()=>assert.throws(()=>npv(100,-100,[100]),/Discount rate/));
+test('non finite cashflow rejected',()=>assert.throws(()=>npv(100,10,[Infinity]),/finite/));
+test('array size limit enforced',()=>assert.throws(()=>npv(100,2,Array(31).fill(1)),/1–30/));
+test('injected regression is distinct from correct multi-period outcome',()=>assert.ok(Math.abs(injectedRegression(1000,10,[600,600])-npv(1000,10,[600,600]))>40));
+test('money formatter is finite-only',()=>assert.throws(()=>money(NaN),/finite/));
