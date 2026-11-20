@@ -5,4 +5,6 @@
 
 Provider archives may contain ephemeral session metadata; do not commit raw NDJSON or secrets to this public repository. Original Kane evidence is available in the linked Actions run until artifact retention expiry. The reviewed JSON captures the actual provider status and per-case links so judges can inspect them independently.
 
-**Scope:** This verifies the five-case *behavioral* Sentinel lab via four Kane browser journeys. It does not demonstrate a separate Sentinel source-repair loop; that remains a competition acceptance task.
+**Scope:** This verifies the five-case *behavioral* Sentinel lab via four Kane browser journeys. A separate Sentinel-specific code repair and Kane rerun is now demonstrated in the linked proof above. This is a documented assistant-directed edit, not a fully autonomous production remediation system.
+
+- [Sentinel-specific genuine failed Kane → AI-assisted source patch → four successful Kane reruns](sentinel-source-repair-2026-11-20.md) — includes separate reproduction branch, source commits, red/green unit tests, real provider case URLs and archive digests; [machine-readable case results](sentinel-source-repair-2026-11-20.json). This is a **disclosed synthetic-source regression** and does not imply unattended general-purpose repair.

@@ -1,0 +1,108 @@
+{
+  "kind": "AXIOM_SENTINEL_SYNTHETIC_SOURCE_REPAIR_VERIFICATION",
+  "date_utc": "2026-11-20",
+  "scope": "Deliberately introduced idempotency regression in an isolated in-memory, no-real-money invoice sandbox, fixed after TestMu Kane CLI failure evidence",
+  "claim_boundary": "AI-assistant-directed source edit with tool access; not an unattended autonomous remediation product or a proof of real-money banking compliance",
+  "repository": "https://github.com/musitu-hackathons/axiom-verify-kanecli-2026",
+  "feature_branch": "feature/axiom-sentinel-integrity-lab",
+  "reproduction_branch": "repro/sentinel-idempotency-closedloop",
+  "broken_source_commit": "a55e8ec0b9f2d89bae87033d2830559b3d5257c0",
+  "repair_source_commit": "3c1c6522d34084e5d9ff4cddd455f89aea049dda",
+  "repair_file": "src/sentinel/engine.mjs",
+  "repair_description": "Removed requestId !== pay-invoice-042 condition that disabled duplicate-suppression for the synthetic invoice ID",
+  "public_target": "https://axiom-sentinel-idempotency-bug-reproduction-f7ftag.v2.appdeploy.ai/",
+  "before": {
+    "url": "https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/actions/runs/44708979561",
+    "date_utc": "2026-11-20T09:18:22.991Z",
+    "provider": "TestMu Kane CLI",
+    "verified": false,
+    "artifact_digest_sha256": "f57d98c482cd6fb118a4f1cefd01b4c8ce98a2eaa6b89853a6d6d381de0a260d",
+    "artifact_id": 14616781272,
+    "tests": [
+      {
+        "id": "duplicate-unsafe",
+        "expected": "passed",
+        "actual": "passed",
+        "exit_code": 0,
+        "good": true,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M7VY86Q3814EVERRJ7DZJG3X/test-cases/01M7W3RRVESF3H6X7N477TSX34/dashboard/share/US_3ZLIAPXAWSA8VB6A3EY1JCN4TQ9SHDTC7SGZWXWHCP40UVCE2QLUR9K1G1IB5NXR?type=summary&agentView=true&fqdn=summary-page",
+        "reason": "Objective completed"
+      },
+      {
+        "id": "duplicate-guarded",
+        "expected": "passed",
+        "actual": "failed",
+        "exit_code": 1,
+        "good": false,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M7VY86Q3814EVERRJ7DZJG3X/test-cases/01M7W3V7R0V793A8WGC6YXRGXJ/dashboard/share/US_YXRB07RAD1EN1HTDYLQ0V9VXAVV59W1XDX5CDWJCG41Q869ENVU1XO7XY7P6NW48?type=summary&agentView=true&fqdn=summary-page",
+        "reason": "Guarded build repeatedly yields RELEASE BLOCKED, 2 SETTLED, and 6/8 controls despite clean reset and reload."
+      }
+    ],
+    "source_unit_tests": {
+      "total": 54,
+      "passed": 51,
+      "failed": 3
+    }
+  },
+  "after": {
+    "url": "https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/actions/runs/44710070648",
+    "date_utc": "2026-11-20T09:31:29.076Z",
+    "provider": "TestMu Kane CLI",
+    "verified": true,
+    "artifact_digest_sha256": "b47aa9aab47a1500570d4cfd9336a86a40823daeff75815288557db81f6d3b07",
+    "artifact_id": 14617033607,
+    "tests": [
+      {
+        "id": "duplicate-unsafe",
+        "expected": "passed",
+        "actual": "passed",
+        "exit_code": 0,
+        "good": true,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M7VY86Q3814EVERRJ7DZJG3X/test-cases/01M7W473PR81RVC6P1RGAFVWDD/dashboard/share/US_FKNRHLKBAJA5M9V7VTF32FXGYS12AD4XBK77G76LJ7M4OZX9A2953E4PPN6BO1E0?type=summary&agentView=true&fqdn=summary-page",
+        "reason": "Objective completed"
+      },
+      {
+        "id": "duplicate-guarded",
+        "expected": "passed",
+        "actual": "passed",
+        "exit_code": 0,
+        "good": true,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M7VY86Q3814EVERRJ7DZJG3X/test-cases/01M7W4A9BH9CDCEWHMYH4W4XP1/dashboard/share/US_2CX3Z53E0PVFP3IW59VV4XPULYEMW0GNNZANQHX6NME2COOI7O13PBDFKGI3AF8Q?type=summary&agentView=true&fqdn=summary-page",
+        "reason": "Objective completed"
+      },
+      {
+        "id": "overdraft-and-tenant",
+        "expected": "passed",
+        "actual": "passed",
+        "exit_code": 0,
+        "good": true,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M7VY86Q3814EVERRJ7DZJG3X/test-cases/01M7W4CR9W9TV62B5NPRRDSPY8/dashboard/share/US_6W9A79YP0V3GZXT6OYRX8M0UQ18OG9PCFKT70ZQNLNUWRA33D7RT90Z5INUZ9EPG?type=summary&agentView=true&fqdn=summary-page",
+        "reason": "Objective completed"
+      },
+      {
+        "id": "accounting-and-key",
+        "expected": "passed",
+        "actual": "passed",
+        "exit_code": 0,
+        "good": true,
+        "test_url": "https://test-manager.lambdatest.com/projects/01M7VY86Q3814EVERRJ7DZJG3X/test-cases/01M7W4JJH0QAJVTNEWANHR1CNN/dashboard/share/US_9GK6IS8EON3IAY4YEEIJ0J54CNXA3UDM1HQR9YG8DK28Z1ZOT4BD2S93771J15IM?type=summary&agentView=true&fqdn=summary-page",
+        "reason": "Objective completed"
+      }
+    ],
+    "source_unit_tests": {
+      "total": 54,
+      "passed": 54,
+      "failed": 0
+    },
+    "synthetic_matrix": {
+      "vulnerable_failures_detected": 5,
+      "guarded_policies_accepted": 5
+    }
+  },
+  "limitations": [
+    "Synthetic fixed fixtures only",
+    "No real money, payment provider, login or persistent ledger",
+    "Browser assertions verify this specific repro, not arbitrary code repair",
+    "The live stable Sentinel preview is a separate non-repro application"
+  ]
+}
