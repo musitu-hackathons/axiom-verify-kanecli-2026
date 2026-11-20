@@ -35,7 +35,13 @@ try{
     for(const get of options){try{const el=get().first();if(!await el.isVisible())continue;await el.fill(question);await page.waitForTimeout(1200);await el.press('Enter');sent=true;break}catch{}}
     if(sent)break;
   }
-  log('Ask Tari in text chat',sent);await page.waitForTimeout(sent?9000:1000);await pause(page,'tari-reply',2300);
+  log('Ask Tari in text chat',sent);
+  // Tari can take more than 10 seconds: retain a genuine clip until the actual reply arrives.
+  if(sent){for(let i=0;i<36;i++){await page.waitForTimeout(1500);
+    const allText=(await Promise.all(page.frames().map(f=>f.locator('body').innerText().catch(()=>'')))).join('\n');
+    if(/I can certainly help|Yes, I can certainly help|what part of managing your salon|you might like to see our Salon/i.test(allText)){log('Tari finished typing',true);break;}
+  }}
+  await pause(page,'tari-reply',3300);
   const texts=(await Promise.all(page.frames().map(f=>f.locator('body').innerText().catch(()=>'')))).join('\n');
   report.tari_verified=sent&&/I can certainly help|Yes, I can certainly help|what part of managing your salon/i.test(texts);
   log('real Tari response displayed',report.tari_verified);
