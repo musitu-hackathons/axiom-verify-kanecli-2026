@@ -76,7 +76,8 @@ jobs:
           retention-days: 7
 
   kane_sentinel:
-    if: github.event_name == 'workflow_dispatch' && inputs.sentinel
+    # Temporary branch-scoped single-use trigger. Remove immediately after run starts.
+    if: (github.event_name == 'workflow_dispatch' && inputs.sentinel) || (github.event_name == 'push' && github.ref == 'refs/heads/feature/axiom-sentinel-integrity-lab' && github.actor == 'evansmusitu' && github.event.head_commit.message == 'Run Sentinel Kane acceptance once')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -88,7 +89,7 @@ jobs:
         env:
           TESTMU_USERNAME: ${{ secrets.TESTMU_USERNAME }}
           TESTMU_ACCESS_KEY: ${{ secrets.TESTMU_ACCESS_KEY }}
-          AXIOM_SENTINEL_URL: ${{ vars.AXIOM_SENTINEL_URL }}
+          AXIOM_SENTINEL_URL: https://axiom-sentinel-payment-integrity-lab-eq0z0z.v2.appdeploy.ai/
         run: |
           test -n "$TESTMU_USERNAME" && test -n "$TESTMU_ACCESS_KEY" && test -n "$AXIOM_SENTINEL_URL" || { echo 'Missing Sentinel URL or TestMu secrets; NOT VERIFIED'; exit 1; }
           npm run verify:sentinel
