@@ -63,7 +63,7 @@
 - [x] **Step 2: Verify focused failures.**
 - [x] **Step 3: Implement CLI runner reusing `parseKaneStream` with real TestMu CLI; manual `sentinel=true` workflow dispatch only, artifacts always uploaded, secrets never displayed.
 - [x] **Step 4: Verify tests and CLI configuration statically; only invoke provider on a reachable deployed Sentinel build.**
-- [ ] **Step 5: Record real Kane run URLs and artifact hashes only after successful execution.
+- [x] **Step 5: Record real Kane run URLs and artifact hashes only after successful execution.
 - [ ] **Step 6: Commit changes to isolated branch only.**
 
 ### Task 4: Publish, validate, document and review
@@ -75,7 +75,7 @@
 - Produces: reproducible source, test commands, security boundaries, and a demonstration path.
 
 - [x] **Step 1: Validate baseline original page and source independence.**
-- [ ] **Step 2: Verify new route and core scenarios in an independently deployed browser, test suite in CI.**
+- [x] **Step 2: Verify new route and core scenarios in an independently deployed browser, test suite in CI.**
 - [x] **Step 3: Deploy the demo if a controlled deployment path is available; never substitute a mocked screenshot for working UI.**
 - [ ] **Step 4: Open a PR against `main` for review, not merge it without acceptance.**
 - [ ] **Step 5: Reverify GitHub branch, review CI outcome, and report unfinished real Kane and autonomous-repair requirements accurately.**

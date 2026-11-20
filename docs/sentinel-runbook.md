@@ -1,6 +1,6 @@
 # AXIOM Sentinel — Synthetic Payment Integrity Lab
 
-**Status: hosted working prototype in an isolated hackathon feature branch.** It has an interactive browser UI, five deterministic incidents, a separate financial oracle, unit and UI smoke checks. **A genuine Sentinel-specific TestMu Kane CLI browser run has been initiated and remains unverified until the provider artifact is inspected.** The previously completed Kane Verify runs (original and repaired NPV demos) are separate historical evidence and must not be used as proof that Sentinel was tested by Kane.
+**Status: hosted working prototype in an isolated hackathon feature branch.** It has an interactive browser UI, five deterministic incidents, a separate financial oracle, unit and UI smoke checks. **A genuine Sentinel-specific TestMu Kane CLI v0.10.6 run was completed successfully on 20 November 2026: four browser objectives passed.** Evidence: [reviewed provider report](proofs/sentinel-kane-2026-11-20.json), [GitHub Actions](https://github.com/musitu-hackathons/axiom-verify-kanecli-2026/actions/runs/44705995556), and downloadable Kane artifact (available until 27 November). This is browser-behavior evidence, not a separate Sentinel code repair loop. The previously completed Kane Verify runs (original and repaired NPV demos) are separate historical evidence and must not be used as proof that Sentinel was tested by Kane.
 
 ## Public preview and local setup
 
@@ -30,13 +30,13 @@ The old AXIOM Verify NPV demonstration remains at `/` for reproducibility. No ba
 
 Use **Fault injected** to see a synthetic bug and **Guarded build** to see the policy enforcement. The oracle independently verifies closing supply, double-entry equality, idempotency, tenant isolation, solvency, journal replay, request matching and scenario settlement count. It must show `RELEASE BLOCKED` if a control fails. This is not a production security test.
 
-## Real Kane CLI browser checks (provider evidence acceptance pending)
+## Real Kane CLI browser checks (four objectives accepted 20 November 2026)
 
 1. The standalone Sentinel prototype is published at https://axiom-sentinel-payment-integrity-lab-eq0z0z.v2.appdeploy.ai/. Do not update the old repaired NPV deployment in place, since its historical Kane results depend on the previous code.
 2. In GitHub Actions, use existing repository secrets `TESTMU_USERNAME` and `TESTMU_ACCESS_KEY`. The feature-branch workflow pins `AXIOM_SENTINEL_URL` to the public static Sentinel deployment; a user can also override the variable in a trusted CLI shell.
 3. Open `.github/workflows/verify.yml` → **Run workflow** → select `sentinel=true` and `main` *only after the feature PR is merged and verified*. Until then select the isolated feature branch (if Actions allows dispatch on the branch), or run the CLI from a trusted temporary branch checkout. The `kane_sentinel` job runs only from explicit `workflow_dispatch` with `inputs.sentinel`. Normal pushes do not spend TestMu credits.
 4. The Kane runner invokes the genuine TestMu CLI (`kane-cli run ... --agent --headless`) with real provider credentials, fails closed on authentication, browser or assertion errors, and stores redacted `.ndjson` stream evidence in `evidence/sentinel-*.ndjson` and `evidence/sentinel-summary.json`. Do not claim pass from `npm test` or synthetic fixtures.
-5. After execution, inspect each actual test URL, `stream_start`, `run_end`, exit code, verification assertion and artifact checksum. Verify the external browser touched the deployed Sentinel URL, not the original `/` NPV app.
+5. Execution complete: all four cases included a real `stream_start`, `run_end` with `passed`, exit code 0 and a TestMu public case URL. The reviewed evidence JSON records the original archive SHA-256 and each case. For any future run, inspect these fields again and never rely solely on the GitHub green check.
 
 ```bash
 # On a trusted environment with the TestMu CLI installed:
