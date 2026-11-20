@@ -1,0 +1,62 @@
+name: LIFELINE genuine browser video - Kane plus Playwright
+on:
+  push:
+    branches:
+      - feature/lifeline-kane-capture-20261120
+  workflow_dispatch:
+    inputs:
+      capture:
+        description: Record the public LIFELINE demo in a real browser
+        type: boolean
+        required: false
+        default: true
+permissions:
+  contents: read
+concurrency:
+  group: lifeline-public-demo-capture-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  record:
+    if: github.event_name == 'push' || inputs.capture
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium recorder
+        run: |
+          npm install --no-save --ignore-scripts playwright@latest
+          npx playwright install --with-deps chromium
+          ffmpeg -version | head -n 1
+      - name: Record real LIFELINE browser UI
+        id: browser_capture
+        continue-on-error: true
+        run: node scripts/lifeline-capture.mjs
+      - name: Convert actual session videos to vertical MP4
+        if: always()
+        continue-on-error: true
+        run: node scripts/lifeline-export.mjs
+      - name: Run real Kane acceptance with existing repository secrets
+        id: kane
+        continue-on-error: true
+        env:
+          TESTMU_USERNAME: ${{ secrets.TESTMU_USERNAME }}
+          TESTMU_ACCESS_KEY: ${{ secrets.TESTMU_ACCESS_KEY }}
+        run: |
+          test -n "$TESTMU_USERNAME" && test -n "$TESTMU_ACCESS_KEY" || { echo 'Kane secrets not configured: NOT VERIFIED'; exit 1; }
+          npm install --global @testmuai/kane-cli
+          node scripts/lifeline-kane.mjs
+      - name: Upload actual browser footage and Kane verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lifeline-real-browser-footage-${{ github.run_number }}
+          path: lifeline-capture/
+          retention-days: 7
+          if-no-files-found: warn
+      - name: Final capture gate
+        if: always()
+        run: |
+          node -e "const fs=require('fs');const d=JSON.parse(fs.readFileSync('lifeline-capture/capture-result.json'));if(!d.tari_verified||!d.booking_verified||d.segments.filter(s=>s.mp4).length!==2){console.error('NOT VERIFIED: missing actual Tari response, booking confirmation or recorded MP4');process.exit(1)} console.log('Real LIFELINE browser recording and booking verified')"
