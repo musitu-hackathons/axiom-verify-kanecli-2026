@@ -83,7 +83,8 @@ jobs:
           retention-days: 7
 
   kane_sentinel:
-    if: github.event_name == 'workflow_dispatch' && inputs.sentinel
+    # One-time repair acceptance trigger; revert immediately after launch.
+    if: (github.event_name == 'workflow_dispatch' && inputs.sentinel) || (github.event_name == 'push' && github.ref == 'refs/heads/repro/sentinel-idempotency-closedloop' && github.actor == 'evansmusitu' && github.event.head_commit.message == 'Verify repaired Sentinel idempotency with Kane once')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
