@@ -95,7 +95,7 @@ jobs:
         env:
           TESTMU_USERNAME: ${{ secrets.TESTMU_USERNAME }}
           TESTMU_ACCESS_KEY: ${{ secrets.TESTMU_ACCESS_KEY }}
-          AXIOM_SENTINEL_URL: ${{ vars.AXIOM_SENTINEL_URL }}
+          AXIOM_SENTINEL_URL: https://axiom-sentinel-payment-integrity-lab-eq0z0z.v2.appdeploy.ai/
         run: |
           test -n "$TESTMU_USERNAME" && test -n "$TESTMU_ACCESS_KEY" && test -n "$AXIOM_SENTINEL_URL" || { echo 'Missing Sentinel URL or TestMu secrets; NOT VERIFIED'; exit 1; }
           npm run verify:sentinel
