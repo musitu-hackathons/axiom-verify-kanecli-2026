@@ -24,3 +24,4 @@ jobs:
           CHROME_BINARY: ${{ steps.chrome.outputs.chrome-path }}
 # Resume field diagnosis v2
 # Corzly step-one fields diagnostic
+# Inspect step-two form only, no final submission
