@@ -2,7 +2,14 @@ import { chromium } from 'playwright';
 const browser=await chromium.launch({executablePath:process.env.CHROME_BINARY,headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
 const page=await browser.newPage();
 await page.goto('https://careers.corzly.com/careers/sales-development-rep/apply',{waitUntil:'domcontentloaded',timeout:45000});
-await page.waitForTimeout(4500);
+await page.waitForTimeout(2000);
+// Synthetic, non-submitted test values used only to inspect the next step.
+const v=page.locator('input');
+await v.nth(0).fill('Form');
+await v.nth(1).fill('Test');
+await v.nth(2).fill('form-test@example.invalid');
+await page.getByRole('button',{name:'Continue'}).click();
+await page.waitForTimeout(2000);
 const data=await page.evaluate(()=>{
  const clean=(s)=>String(s||'').trim().replace(/\s+/g,' ').slice(0,120);
  const elements=[...document.querySelectorAll('input,button,select,textarea,a,[role="button"]')];
