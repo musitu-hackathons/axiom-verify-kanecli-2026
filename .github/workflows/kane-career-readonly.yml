@@ -1,0 +1,27 @@
+name: Kane career site readiness (no applications)
+on:
+  push:
+    branches:
+      - career/kane-readonly-job-check-20261124
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  kane-career-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: browser-actions/setup-chrome@v1
+      - run: npm install --global @testmuai/kane-cli
+      - name: Read-only public application page inspection
+        env:
+          TESTMU_USERNAME: ${{ secrets.TESTMU_USERNAME }}
+          TESTMU_ACCESS_KEY: ${{ secrets.TESTMU_ACCESS_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${TESTMU_USERNAME}" && test -n "${TESTMU_ACCESS_KEY}" || { echo "Missing Kane CI credentials"; exit 1; }
+          kane-cli run 'Inspect the public Corzly Sales Development Representative vacancy. Check whether applications are currently accepted. Report whether the page states Zimbabwe is eligible, the advertised guaranteed base salary, and exactly which application fields or uploads are mandatory. Do not log in, enter or reveal any applicant information, upload documents, click submit, accept terms, or attempt to apply. This is a read-only eligibility and form-readiness check.' --url https://careers.corzly.com/careers/sales-development-rep --agent --headless --mode action --final-validation on --max-steps 30 --timeout 180 --username "${TESTMU_USERNAME}" --access-key "${TESTMU_ACCESS_KEY}"
