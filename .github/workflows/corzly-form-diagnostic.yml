@@ -1,0 +1,21 @@
+name: Corzly form structure diagnostic
+on:
+  push:
+    branches:
+      - career/kane-corzly-submit-20261124
+    paths:
+      - .github/workflows/corzly-form-diagnostic.yml
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save playwright
+      - uses: browser-actions/setup-chrome@v1
+      - run: node scripts/corzly-form-diagnostic.mjs
