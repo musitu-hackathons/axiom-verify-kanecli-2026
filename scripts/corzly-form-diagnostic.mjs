@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+const browser=await chromium.launch({executablePath:process.env.CHROME_BINARY,headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
 const page=await browser.newPage();
 await page.goto('https://careers.corzly.com/careers/sales-development-rep/apply',{waitUntil:'domcontentloaded',timeout:45000});
 await page.waitForTimeout(4500);
