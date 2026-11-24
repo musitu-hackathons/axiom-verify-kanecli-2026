@@ -8,6 +8,7 @@ const v=page.locator('input');
 await v.nth(0).fill('Form');
 await v.nth(1).fill('Test');
 await v.nth(2).fill('form-test@example.invalid');
+await v.nth(4).fill('Harare, Zimbabwe');
 await page.getByRole('button',{name:'Continue'}).click();
 await page.waitForTimeout(2000);
 const data=await page.evaluate(()=>{
