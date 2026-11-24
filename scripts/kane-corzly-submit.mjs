@@ -31,8 +31,23 @@ const context = browser.contexts()[0];
 if (!context) throw Error('Chrome browser context missing');
 const page = context.pages()[0] || await context.newPage();
 await page.goto('https://careers.corzly.com/careers/sales-development-rep/apply', {waitUntil:'domcontentloaded', timeout:45000});
-await page.waitForTimeout(1000);
-console.log('APPLICATION_FORM: opened multi-step role application');
+await page.waitForTimeout(1800);
+const p=packet.profile || {};
+const rawName=String(p.full_name || p.name || 'Evans Musitu').trim();
+const parts=rawName.split(/\s+/);
+const firstName=parts.shift();
+const lastName=parts.join(' ');
+const input=page.locator('input');
+if ((await input.count()) < 5) throw Error('Corzly Step 1 fields not rendered');
+await input.nth(0).fill(firstName);
+await input.nth(1).fill(lastName);
+await input.nth(2).fill(String(p.email || 'evansmusitu5@gmail.com'));
+await input.nth(3).fill(String(p.phone || '+263 78 157 2008'));
+await input.nth(4).fill('Harare, Zimbabwe');
+await page.getByRole('button', {name:'Continue'}).click();
+await page.waitForTimeout(1600);
+const stage = (await page.locator('body').innerText()).match(/Step\s+\d\s+of\s+4/i)?.[0] || 'UNKNOWN';
+console.log('APPLICATION_STEP: '+stage+' (private personal fields entered, not logged)');
 let watcherActive = true;
 let resumeStaged = false;
 const watcher = (async () => {
@@ -97,6 +112,7 @@ const positive = /(thank you.{0,90}(appl|interest)|application (has been )?(succ
 const negative = /(could not submit|application failed|please upload|upload required|missing required)/i.test(screen);
 const verifiedSubmission = positive && !negative && resumeStaged;
 const summary = String(finalEvent?.summary || '');
+console.log('KANE_SAFE_REASON: '+JSON.stringify({reason_code:finalEvent?.reason_code||'unknown',result_code:finalEvent?.result_code||'unknown',status:finalEvent?.status||'unknown'}));
 console.log('KANE_RESULT: ' + JSON.stringify({
   submission: verifiedSubmission ? 'CONFIRMED_SUBMITTED' : 'NOT_CONFIRMED',
   kaneExitCode: exitCode, kaneStatus: finalEvent?.status || 'not_reported',
@@ -106,4 +122,5 @@ console.log('KANE_RESULT: ' + JSON.stringify({
   confirmationUrl: currentUrl.replace(/[?#].*$/, ''),
   kaneReportedSubmission: /\b(submitted successfully|application (submitted|received)|successfully applied)\b/i.test(summary) && !/\b(not submitted|did not submit)\b/i.test(summary)
 }));
+await browser.close();
 if (!verifiedSubmission) process.exitCode = 1;
