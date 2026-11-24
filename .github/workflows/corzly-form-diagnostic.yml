@@ -26,3 +26,5 @@ jobs:
 # Corzly step-one fields diagnostic
 # Inspect step-two form only, no final submission
 # Include synthetic location to advance Step 2
+
+# Inspect step 3 only; do not submit
