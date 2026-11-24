@@ -1,0 +1,89 @@
+name: Kane Corzly private application
+on:
+  push:
+    branches:
+      - career/kane-corzly-submit-20261124
+    paths:
+      - .github/workflows/kane-corzly-submit.yml
+permissions:
+  contents: read
+jobs:
+  corzly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: browser-actions/setup-chrome@v1
+        id: chrome
+      - run: npm install --no-save playwright && npm install --global @testmuai/kane-cli
+      - name: Create one-time public key for secure résumé delivery
+        run: |
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out /tmp/corzly-ephemeral-private.pem >/dev/null 2>&1
+          chmod 600 /tmp/corzly-ephemeral-private.pem
+          openssl pkey -in /tmp/corzly-ephemeral-private.pem -pubout -out /tmp/corzly-ephemeral-public.pem
+      - name: Offer one-time public key (not applicant data)
+        uses: actions/upload-artifact@v4
+        with:
+          name: corzly-ephemeral-public-key-${{ github.run_id }}
+          path: /tmp/corzly-ephemeral-public.pem
+          retention-days: 1
+      - name: Receive encrypted résumé and candidate details
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ready=0
+          for n in $(seq 1 130); do
+            if curl --silent --show-error --fail --max-time 10 \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H 'Accept: application/vnd.github+json' \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/ci-private/corzly.enc.json?ref=career%2Fkane-corzly-submit-20261124" \
+              -o /tmp/corzly-envelope-response.json 2>/dev/null; then
+              if node -e 'const fs=require("fs");const j=JSON.parse(fs.readFileSync("/tmp/corzly-envelope-response.json","utf8"));if(j.encoding!=="base64")process.exit(2);fs.writeFileSync("/tmp/corzly.enc.json",Buffer.from(j.content,"base64"),{mode:0o600});'; then
+                ready=1
+                break
+              fi
+            fi
+            sleep 6
+          done
+          if [ "$ready" -ne 1 ]; then echo 'Encrypted applicant packet never arrived; NOT SUBMITTED'; exit 1; fi
+          echo 'Encrypted applicant packet received (contents not logged).'
+      - name: Start isolated application Chrome
+        env:
+          CHROME_BINARY: ${{ steps.chrome.outputs.chrome-path }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$CHROME_BINARY" --headless --no-sandbox --disable-gpu \
+            --disable-dev-shm-usage --remote-debugging-port=9222 \
+            --remote-allow-origins='*' --user-data-dir=/tmp/corzly-chrome-profile about:blank \
+            > /tmp/corzly-chrome-private.log 2>&1 &
+          for n in $(seq 1 40); do
+            if curl --silent --fail http://127.0.0.1:9222/json/version > /dev/null; then
+              echo 'Private Chrome session ready'
+              exit 0
+            fi
+            sleep 1
+          done
+          echo 'Chrome session unavailable'; exit 1
+      - name: Stage résumé securely and submit via Kane CLI
+        env:
+          TESTMU_USERNAME: ${{ secrets.TESTMU_USERNAME }}
+          TESTMU_ACCESS_KEY: ${{ secrets.TESTMU_ACCESS_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$TESTMU_USERNAME" && test -n "$TESTMU_ACCESS_KEY" || { echo 'Kane secret names are unconfigured; NOT SUBMITTED'; exit 1; }
+          node scripts/kane-corzly-submit.mjs
+      - name: Delete runner's private applicant files
+        if: always()
+        shell: bash
+        run: |
+          for file in /tmp/corzly-private-cv.pdf /tmp/corzly-private-context.md /tmp/corzly.enc.json /tmp/corzly-ephemeral-private.pem /tmp/corzly-envelope-response.json /tmp/kane-private-output.log /tmp/kane-private-errors.log; do
+            if [ -f "$file" ]; then shred -u "$file" || rm -f "$file"; fi
+          done
+          echo 'Temporary applicant data cleanup finished'
