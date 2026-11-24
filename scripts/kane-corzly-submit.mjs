@@ -1,0 +1,91 @@
+import fs from 'node:fs';
+import { constants, createDecipheriv, privateDecrypt } from 'node:crypto';
+import { chromium } from 'playwright';
+import { spawn } from 'node:child_process';
+
+const enc = JSON.parse(fs.readFileSync('/tmp/corzly.enc.json', 'utf8'));
+const key = privateDecrypt({
+  key: fs.readFileSync('/tmp/corzly-ephemeral-private.pem'),
+  padding: constants.RSA_PKCS1_OAEP_PADDING,
+  oaepHash: 'sha256'
+}, Buffer.from(enc.wrappedKey, 'base64'));
+const decipher = createDecipheriv('aes-256-gcm', key, Buffer.from(enc.nonce, 'base64'));
+decipher.setAuthTag(Buffer.from(enc.tag, 'base64'));
+const plaintext = Buffer.concat([decipher.update(Buffer.from(enc.ciphertext, 'base64')), decipher.final()]);
+const packet = JSON.parse(plaintext.toString('utf8'));
+if (!packet?.profile || !packet?.cv_pdf_base64) throw Error('Secure application packet incomplete');
+const pdf = Buffer.from(packet.cv_pdf_base64, 'base64');
+if (pdf.subarray(0, 5).toString() !== '%PDF-') throw Error('Invalid résumé PDF');
+fs.writeFileSync('/tmp/corzly-private-cv.pdf', pdf, { mode: 0o600 });
+fs.writeFileSync('/tmp/corzly-private-context.md',
+  '# Private candidate facts for one authorized Corzly application\n' +
+  JSON.stringify(packet.profile, null, 2) + '\n' +
+  'Use only truthful statements in this context. No fabricated work experience, work authorization, tax residency, or qualifications. Ask or stop if a required answer is unknown.\n' +
+  'The résumé is already attached in the current browser session; do not navigate away or reload before submitting.\n',
+  { mode: 0o600 });
+plaintext.fill(0);
+key.fill(0);
+
+const browser = await chromium.connectOverCDP('http://127.0.0.1:9222');
+const context = browser.contexts()[0];
+if (!context) throw Error('Chrome browser context missing');
+const page = context.pages()[0] || await context.newPage();
+await page.goto('https://careers.corzly.com/careers/sales-development-rep/apply', {waitUntil:'domcontentloaded', timeout:45000});
+await page.waitForTimeout(2500);
+const files = page.locator('input[type=file]');
+const total = await files.count();
+if (!total) throw Error('No résumé file input found on live application form');
+await files.first().setInputFiles({name:'Evans_Musitu_Sales_Development_CV.pdf', mimeType:'application/pdf', buffer:pdf});
+const staged = await files.first().evaluate(el => !!(el.files && el.files.length));
+if (!staged) throw Error('Résumé upload staging was not confirmed');
+console.log('PREPARED: encrypted résumé decrypted and staged locally in the live browser; no public applicant details output');
+
+const goal = [
+  'On the CURRENT OPEN browser tab, finish the official Corzly Sales Development Representative job application.',
+  'The user explicitly authorized submission. The private local context contains verified applicant information.',
+  'A genuine PDF résumé is ALREADY UPLOADED into the existing form: do not reload the page, do not navigate away.',
+  'Enter full name, email, phone and Zimbabwe location from the private context.',
+  'Answer only questions supported by that context; do not invent employment, references, US tax residency, legal work authorization, guarantees of equipment or schedule, or professional experience.',
+  'Review all required fields and the uploaded PDF, then CLICK THE FINAL SUBMIT BUTTON ONCE when truthful and complete.',
+  'If mandatory answers are unsupported or the uploaded file is lost, STOP without submitting and report the blocker.',
+  'After submitting, VERIFY the confirmation on the actual page, such as an application received thank-you screen. Do not claim success without evidence.',
+  'Do not pay fees, consent to unrelated actions, or navigate to other companies.'
+].join(' ');
+const argv = [
+  'run', goal, '--allow-missing-url', '--cdp-endpoint', 'http://127.0.0.1:9222',
+  '--agent', '--headless', '--mode', 'action', '--final-validation', 'on',
+  '--local-context', '/tmp/corzly-private-context.md', '--max-steps', '65',
+  '--timeout', '320', '--username', process.env.TESTMU_USERNAME || '',
+  '--access-key', process.env.TESTMU_ACCESS_KEY || ''
+];
+const out = fs.openSync('/tmp/kane-private-output.log', 'w', 0o600);
+const err = fs.openSync('/tmp/kane-private-errors.log', 'w', 0o600);
+const exitCode = await new Promise((resolve, reject) => {
+  const child = spawn('kane-cli', argv, {stdio:['ignore',out,err], env:process.env});
+  child.on('error', reject);
+  child.on('exit', code => resolve(code));
+});
+fs.closeSync(out); fs.closeSync(err);
+const lines = fs.readFileSync('/tmp/kane-private-output.log','utf8').split('\n');
+let finalEvent = null;
+for (const line of lines) {
+  if (!line.trim().startsWith('{')) continue;
+  try { const v = JSON.parse(line); if (v.type === 'run_end') finalEvent = v; } catch {}
+}
+let screen = '';
+let currentUrl = '';
+try { currentUrl = page.url(); screen = await page.locator('body').innerText({timeout:15000}); }
+catch {}
+const positive = /(thank you.{0,90}(appl|interest)|application (has been )?(successfully )?(submitted|received)|we (have|'ve) received your application|your application was (sent|submitted)|successfully applied)/i.test(screen);
+const negative = /(could not submit|application failed|please upload|upload required|missing required)/i.test(screen);
+const verifiedSubmission = positive && !negative;
+const summary = String(finalEvent?.summary || '');
+console.log('KANE_RESULT: ' + JSON.stringify({
+  submission: verifiedSubmission ? 'CONFIRMED_SUBMITTED' : 'NOT_CONFIRMED',
+  kaneExitCode: exitCode, kaneStatus: finalEvent?.status || 'not_reported',
+  pageConfirmationVisible: positive,
+  pageShowsBlocker: negative,
+  confirmationUrl: currentUrl.replace(/[?#].*$/, ''),
+  kaneReportedSubmission: /\b(submitted successfully|application (submitted|received)|successfully applied)\b/i.test(summary) && !/\b(not submitted|did not submit)\b/i.test(summary)
+}));
+if (!verifiedSubmission) process.exitCode = 1;
